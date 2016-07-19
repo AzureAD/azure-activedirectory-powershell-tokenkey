@@ -12,7 +12,7 @@ If the application does not support automatic rollover, changing the token signi
 - Or on a production application **during downtime window**
 
 # Steps To Run The Script
-1.	Download and extract the scripts attached
+1.	[Download](https://github.com/AzureAD/azure-activedirectory-powershell-tokenkey/blob/master/Zip/AzureADPowershellTokenKey.zip?raw=true) and extract the scripts
 2.	Start Windows Powershell
 3.	Navigate to the folder where the scripts were extracted
 4.	Run .\install-aadGraphModule.ps1
