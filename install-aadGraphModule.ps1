@@ -31,7 +31,7 @@ $wc = New-Object System.Net.WebClient
 $wc.DownloadFile("http://www.nuget.org/nuget.exe",$modulePath + "\Nugets\nuget.exe");
 $nugetUpdateExpression = $modulePath + "\Nugets\nuget.exe update -self"
 Invoke-Expression $nugetUpdateExpression
-$nugetDownloadExpression = $modulePath + "\Nugets\nuget.exe install Microsoft.IdentityModel.Clients.ActiveDirectory -OutputDirectory " + $modulePath + "\Nugets | out-null"
+$nugetDownloadExpression = $modulePath + "\Nugets\nuget.exe install Microsoft.IdentityModel.Clients.ActiveDirectory -Version 2.14.201151115 -OutputDirectory " + $modulePath + "\Nugets | out-null"
 Invoke-Expression $nugetDownloadExpression
 
 Write-Host "Copying module files to the module directory" -ForegroundColor Green
