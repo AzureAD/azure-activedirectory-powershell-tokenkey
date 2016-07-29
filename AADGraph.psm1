@@ -61,7 +61,7 @@ function Execute-AADQuery ($Base, $HTTPVerb, $Query, $Data, [switch] $Silent) {
   $return = $null
   if($global:aadGPoShAuthResult -ne $null) {
     $header = $global:aadGPoShAuthResult.CreateAuthorizationHeader()
-    $headers = @{"Authorization"=$header;"Content-Type"="application/json"}
+    $headers = @{"Authorization" = $header}
     $uri = [string]::Format("{0}{1}/{2}?api-version={3}{4}",$global:aadGPoShGraphUrl,$global:aadGPoShAuthResult.TenantId, $base, $global:aadGPoShGraphVer, $query)
     if($data -ne $null){
       $enc = New-Object "System.Text.ASCIIEncoding"
@@ -86,7 +86,7 @@ function Execute-AADQuery ($Base, $HTTPVerb, $Query, $Data, [switch] $Silent) {
         Write-Host $body -ForegroundColor Cyan
       }
     }
-    $result = Invoke-WebRequest -Method $HTTPVerb -Uri $uri -Headers $headers -Body $body
+    $result = Invoke-WebRequest -Method $HTTPVerb -Uri $uri -Headers $headers -Body $body -ContentType "application/json"
     if($result.StatusCode -ge 200 -and $result.StatusCode -le 399){
       if(-not $Silent){
         Write-Host
