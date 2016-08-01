@@ -6,7 +6,7 @@ function Get-AADObject([string]$Type, [string]$Query="", [switch] $All, [switch]
     if(-not $Silent){
       Write-Host HTTP GET $uri -ForegroundColor Cyan
     }
-    $result = Invoke-WebRequest -Method Get -Uri $uri -Headers @{"Authorization"=$header;"Content-Type"="application/json"}
+    $result = Invoke-WebRequest -Method Get -Uri $uri -Headers @{"Authorization" = $header} -ContentType "application/json"
     if($result.StatusCode -eq 200){
       if(-not $Silent){
         Write-Host "Get succeeded." -ForegroundColor Cyan
@@ -23,7 +23,7 @@ function Get-AADObject([string]$Type, [string]$Query="", [switch] $All, [switch]
                 Write-Host "Getting the next page of results." -ForegroundColor Cyan
                 Write-Host HTTP GET ($uri + "&" + $nextLink.Split('?')[1]) -ForegroundColor Cyan
               }
-              $result = Invoke-WebRequest -Method Get -Uri ($uri + "&" + $nextLink.Split('?')[1]) -Headers @{"Authorization"=$header;"Content-Type"="application/json"}
+              $result = Invoke-WebRequest -Method Get -Uri ($uri + "&" + $nextLink.Split('?')[1]) -Headers @{"Authorization" = $header} -ContentType "application/json"
               if($result.StatusCode -eq 200){
                 $json = (ConvertFrom-Json $result.Content)
                 if($json -ne $null){
@@ -54,7 +54,7 @@ function Get-AADObjectById([string]$Type, [string]$Id, [switch] $Silent) {
     if(-not $Silent){
       Write-Host HTTP GET $uri -ForegroundColor Cyan
     }
-    $result = Invoke-WebRequest -Method Get -Uri $uri -Headers @{"Authorization"=$header;"Content-Type"="application/json"}
+    $result = Invoke-WebRequest -Method Get -Uri $uri -Headers @{"Authorization" = $header} -ContentType "application/json"
     if($result.StatusCode -eq 200)
     {
       if(-not $Silent){
@@ -84,8 +84,8 @@ function New-AADObject([string]$Type, [object]$Object, [switch] $Silent) {
     }
     $byteArray = $enc.GetBytes($body)
     $contentLength = $byteArray.Length
-    $headers = @{"Authorization"=$header;"Content-Type"="application/json";"Content-Length"=$contentLength}
-    $result = Invoke-WebRequest -Method Post -Uri $uri -Headers $headers -Body $body
+    $headers = @{"Authorization" = $header; "Content-Length" = $contentLength}
+    $result = Invoke-WebRequest -Method Post -Uri $uri -Headers $headers -Body $body -ContentType "application/json"
     if($result.StatusCode -eq 201){
       if(-not $Silent){
         Write-Host "Create succeeded." -ForegroundColor Cyan
@@ -113,8 +113,8 @@ function Set-AADObject([string]$Type, [string]$Id, [object]$Object, [switch] $Si
     }
     $byteArray = $enc.GetBytes($body)
     $contentLength = $byteArray.Length
-    $headers = @{"Authorization"=$header;"Content-Type"="application/json";"Content-Length"=$contentLength}
-    $result = Invoke-WebRequest -Method Patch -Uri $uri -Headers $headers -Body $body
+    $headers = @{"Authorization" = $header; "Content-Length" = $contentLength}
+    $result = Invoke-WebRequest -Method Patch -Uri $uri -Headers $headers -Body $body -ContentType "application/json"
     if($result.StatusCode -eq 204){
       if(-not $Silent){
         Write-Host "Update succeeded." -ForegroundColor Cyan
@@ -133,8 +133,8 @@ function Remove-AADObject([string]$Type, [string]$Id, [switch] $Silent) {
     if(-not $Silent){
       Write-Host HTTP DELETE $uri -ForegroundColor Cyan
     }
-    $headers = @{"Authorization"=$header;"Content-Type"="application/json"}
-    $result = Invoke-WebRequest -Method Delete -Uri $uri -Headers $headers
+    $headers = @{"Authorization" = $header; "Content-Length" = $contentLength}
+    $result = Invoke-WebRequest -Method Delete -Uri $uri -Headers $headers -ContentType "application/json"
     if($result.StatusCode -eq 204){
       if(-not $Silent){
         Write-Host "Delete succeeded." -ForegroundColor Cyan
@@ -160,7 +160,7 @@ function Get-AADLinkedObject([string]$Type, [string] $Id, [string]$Relationship,
     if(-not $Silent) {
       Write-Host HTTP GET $uri -ForegroundColor Cyan
     }
-    $result = Invoke-WebRequest -Method Get -Uri $uri -Headers @{"Authorization"=$header;"Content-Type"="application/json"}
+    $result = Invoke-WebRequest -Method Get -Uri $uri -Headers @{"Authorization" = $header} -ContentType "application/json"
     if($result.StatusCode -eq 200){
       if(-not $Silent) {
         Write-Host "Get succeeded." -ForegroundColor Cyan
@@ -178,7 +178,7 @@ function Get-AADLinkedObject([string]$Type, [string] $Id, [string]$Relationship,
                   Write-Host "Getting the next page of results." -ForegroundColor Cyan
                   Write-Host HTTP GET ($uri + "&" + $nextLink.Split('?')[1]) -ForegroundColor Cyan
                 }
-                $result = Invoke-WebRequest -Method Get -Uri ($uri + "&" + $nextLink.Split('?')[1]) -Headers @{"Authorization"=$header;"Content-Type"="application/json"}
+                $result = Invoke-WebRequest -Method Get -Uri ($uri + "&" + $nextLink.Split('?')[1]) -Headers @{"Authorization" = $header} -ContentType "application/json"
                 if($result.StatusCode -eq 200){
                   $json = (ConvertFrom-Json $result.Content)
                   if($json -ne $null){
@@ -240,8 +240,8 @@ function Set-AADObjectProperty([string]$Type, [string] $Id, [string]$Property, [
       }
     }
     $contentLength = $byteArray.Length
-    $headers = @{"Authorization"=$header;"Content-Type"=$contentType;"Content-Length"=$contentLength}
-    $result = Invoke-WebRequest -Method $HTTPMethod -Uri $uri -Headers $headers -Body $body
+    $headers = @{"Authorization" = $header; "Content-Length" = $contentLength}
+    $result = Invoke-WebRequest -Method $HTTPMethod -Uri $uri -Headers $headers -Body $body -ContentType $contentType
     if($result.StatusCode -eq 204){
       if(-not $Silent){
         Write-Host "Update succeeded." -ForegroundColor Cyan
