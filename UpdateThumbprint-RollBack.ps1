@@ -18,7 +18,7 @@ if ($notInstalled){
   .\install-aadGraphModule.ps1
 }
 
-connect-aad
+connect-aad -Tenant $tenant -Env $env
 $content = @{preferredTokenSigningKeyThumbprint = "3270bf5597004df339a4e62224731b6bd82810a6"}
 $appId = read-host "Enter the Application ID (Client ID)"
 
