@@ -1,6 +1,6 @@
 # Azure Active Directory Token Key Scripts
 
-This respository contains PowerShell scripts that developers and administrators can use to test their Azure Active Directory integrated applications for automatic token signing key rollover. For more information about signing key rollover, check out the [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/).
+This repository contains PowerShell scripts that developers and administrators can use to test their Azure Active Directory integrated applications for automatic token signing key rollover. For more information about signing key rollover, check out the [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/).
 
 # Impact
 
@@ -11,7 +11,7 @@ These scripts set the preferred token signing key on a specific application. As 
 These scripts can **only be run by an Azure Active Directory Global Administrator**.
 
 If the application does not support automatic rollover, changing the token signing key will result in downtime. Therefore, it is strongly recommended that these scripts are only run either
-- on a **test application** for which downtime is acceptable; or, 
+- on a **test application** for which downtime is acceptable; or,
 - on a production application **during downtime window**.
 
 # Steps To Run The Script
@@ -19,7 +19,7 @@ If the application does not support automatic rollover, changing the token signi
 1.	[Download](../../archive/master.zip) and extract the scripts.
 2.	Start Windows PowerShell.
 3.	Navigate to the folder where the scripts were extracted.
-4.	Run the following to install the AADGraph module (and ADAL): 
+4.	Run the following to install the AADGraph module (and ADAL):
 
     ```powershell
     .\install-aadGraphModule.ps1
