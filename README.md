@@ -1,10 +1,14 @@
-# Azure Active Directory Token Key Scripts
+# Azure Active Directory Token Signing Key Scripts
 
-This repository contains PowerShell scripts that developers and administrators can use to test their Azure Active Directory integrated applications for automatic token signing key rollover. For more information about signing key rollover, check out the [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/).
+This repository contains PowerShell scripts that developers and administrators can use to:
+- Test their Azure Active Directory integrated applications for automatic token signing key rollover.
+- Establish a manual signing key rollover process for their Azure Active Directory integrated applications that do not support automatic token signing key rollover.
+
+For more information about signing key rollover, check out the [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/).
 
 # Impact
 
-These scripts set the preferred token signing key on a specific application. As a result, **any user that signs in to the application** after the script is run will receive tokens signed with the preferred certificate.
+These scripts set the preferred token signing key on a specific application. As a result, **any user that signs in to the application** after the script is run will receive tokens signed with the preferred key.
 
 # Pre-Requisites
 
@@ -14,7 +18,7 @@ If the application does not support automatic rollover, changing the token signi
 - on a **test application** for which downtime is acceptable; or,
 - on a production application **during downtime window**.
 
-# Steps To Run The Script
+# Steps To Setup The Scripts
 
 1.	[Download](../../archive/master.zip) and extract the scripts.
 2.	Start Windows PowerShell.
@@ -24,23 +28,63 @@ If the application does not support automatic rollover, changing the token signi
     ```powershell
     .\install-aadGraphModule.ps1
     ```
-5.	Execute the following to configure your application to use the new certificate:
+
+# Steps To Test For Automatic Rollover
+
+1.  Get the list of available signing keys:
 
     ```powershell
-    .\UpdateThumbprint-RollForward.ps1
+    .\Get-AADSigningKey.ps1 | Format-Table
     ```
 
-6.	Test the web application. The change is instantaneous, but make sure you use a new browser session (e.g. IE's "InPrivate", Chrome "Incognito", or Firefox's "Private") to ensure you are issued a new token.
-7.	If the web application signs you in properly, it supports automatic rollover. If it does not, check out the section below.
-8.	Execute the following script to revert to normal behavior:
+2.  Pick any of the keys and configure Azure Active Directory to use that key with your application:
 
     ```powershell
-    .\UpdateThumbprint-RestoreDefaultBehavior.ps1
+    .\Set-AADSigningKey.ps1 -KeyThumbprint <Thumbprint>
     ```
 
-# Sign-In Failure After Testing
+3.	Test the web application. The change is instantaneous, but make sure you use a new browser session (e.g. IE's "InPrivate", Chrome "Incognito", or Firefox's "Private") to ensure you are issued a new token.
+4.  Repeat steps 2 through 3 with all the keys returned from step 1.
+5.	If the web application signs you in properly, it supports automatic rollover. If it does not:
+  - Check out [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/) for guidance on how to modify your application in order to add support for automatic rollover.
+  - Alternatively, check out the following sections for guidance on establishing a manual rollover process.
+6.	Execute the following script to revert to normal behavior:
 
-If the application fails to sign users in after running the scripts, then it likely does not support automatic signing key rollover. Check out the [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/) for guidance on how to modify your application in order to add support for automatic rollover.
+    ```powershell
+    .\Set-AADSigningKey.ps1 -Default
+    ```
+
+# Steps To Perform Manual Rollover
+
+1.  Get the latest signing key:
+
+    ```powershell
+    .\Get-AADSigningKey.ps1 -Latest
+    ```
+
+2.  Download the latest signing key:
+
+    ```powershell
+    ..\Get-AADSigningKey.ps1 -Latest -DownloadPath <DownloadPath>
+    ```
+
+3.  Update your application's code or configuration to the new key.
+4.  Configure Azure Active Directory to use that latest key with your application:
+
+    ```powershell
+    .\Set-AADSigningKey.ps1 -Latest
+    ```
+5.	Test the web application. The change is instantaneous, but make sure you use a new browser session (e.g. IE's "InPrivate", Chrome "Incognito", or Firefox's "Private") to ensure you are issued a new token.
+6.	If you experience any issues, revert to the previous key you were using and contact Azure support:
+
+    ```powershell
+    .\Set-AADSigningKey.ps1 -KeyThumbprint <Thumbprint>
+    ```
+7.  Once you update your application as per our guidance in [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/) to support for automatic rollover, revert to normal behavior:
+
+    ```powershell
+    .\Set-AADSigningKey.ps1 -Default
+    ```
 
 # Security Reporting
 
