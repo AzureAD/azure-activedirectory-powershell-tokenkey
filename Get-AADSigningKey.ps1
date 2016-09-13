@@ -8,6 +8,7 @@ Param(
     $Environment="prod",
 
     [switch]$Latest,
+    [switch]$IncludeExpired,
     [string]$DownloadPath
 )
 
@@ -27,6 +28,11 @@ foreach ($key in $keysJson.keys) {
     $cert = new-object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList @(,$bytes)
 
     $certs += new-object PSObject -Property @{ 'Kid'=$key.kid; 'Thumbprint'=$cert.Thumbprint; 'NotAfter'=$cert.NotAfter; 'NotBefore'=$cert.NotBefore; 'Cert'=$cert }
+}
+
+if(!$IncludeExpired)
+{
+  $certs = $certs | where NotAfter -gt (Get-Date)
 }
 
 if ($Latest) {
