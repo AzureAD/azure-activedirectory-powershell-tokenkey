@@ -35,9 +35,9 @@ $nugetDownloadExpression = $modulePath + "\Nugets\nuget.exe install Microsoft.Id
 Invoke-Expression $nugetDownloadExpression
 
 Write-Host "Copying module files to the module directory" -ForegroundColor Green
-Copy-Item $filesDirPath"\AADGraph.psd1" -Destination $modulePath -Force 
-Copy-Item $filesDirPath"\AADGraph.psm1" -Destination $modulePath -Force 
-Copy-Item $filesDirPath"\Cmdlets\*.psm1" -Destination $modulePath"\Cmdlets" -Force 
+Copy-Item $filesDirPath"\AADGraph.psd1" -Destination $modulePath -Force
+Copy-Item $filesDirPath"\AADGraph.psm1" -Destination $modulePath -Force
+Copy-Item $filesDirPath"\Cmdlets\*.psm1" -Destination $modulePath"\Cmdlets" -Force
 
 Import-Module AADGraph
 
