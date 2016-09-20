@@ -40,7 +40,7 @@ If the application does not support automatic rollover, changing the token signi
 2.  Pick any of the keys and configure Azure Active Directory to use that key with your application:
 
     ```powershell
-    .\Set-AADSigningKey.ps1 -KeyThumbprint <Thumbprint>
+    .\Set-AADSigningKey.ps1 -ApplicationId <ApplicationId> -KeyThumbprint <Thumbprint>
     ```
 
 3.	Test the web application. The change is instantaneous, but make sure you use a new browser session (e.g. IE's "InPrivate", Chrome "Incognito", or Firefox's "Private") to ensure you are issued a new token.
@@ -51,7 +51,7 @@ If the application does not support automatic rollover, changing the token signi
 6.	Execute the following script to revert to normal behavior:
 
     ```powershell
-    .\Set-AADSigningKey.ps1 -Default
+    .\Set-AADSigningKey.ps1 -ApplicationId <ApplicationId> -Default
     ```
 
 # Steps To Perform Manual Rollover
@@ -73,18 +73,18 @@ If the application does not support automatic rollover, changing the token signi
 5.  Configure Azure Active Directory to use that latest key with your application:
 
     ```powershell
-    .\Set-AADSigningKey.ps1 -Latest
+    .\Set-AADSigningKey.ps1 -ApplicationId <ApplicationId> -Latest
     ```
 6.	Test the web application. The change is instantaneous, but make sure you use a new browser session (e.g. IE's "InPrivate", Chrome "Incognito", or Firefox's "Private") to ensure you are issued a new token.
 7.	If you experience any issues, revert to the previous key you were using and contact Azure support:
 
     ```powershell
-    .\Set-AADSigningKey.ps1 -KeyThumbprint <Thumbprint>
+    .\Set-AADSigningKey.ps1 -ApplicationId <ApplicationId> -KeyThumbprint <Thumbprint>
     ```
 8.  Once you update your application as per our guidance in [Signing key rollover in Azure Active Directory documentation](https://azure.microsoft.com/en-us/documentation/articles/active-directory-signing-key-rollover/) to support for automatic rollover, revert to normal behavior:
 
     ```powershell
-    .\Set-AADSigningKey.ps1 -Default
+    .\Set-AADSigningKey.ps1 -ApplicationId <ApplicationId> -Default
     ```
 
 # Security Reporting
